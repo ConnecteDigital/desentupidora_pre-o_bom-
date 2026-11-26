@@ -1,7 +1,7 @@
 # Desentupidora Preço Bom
 
 Site estático (Astro) da Desentupidora Preço Bom, publicado na Vercel.
-Domínio: https://desentupidoraprecobom24h.com.br (definido em `site`, no `astro.config.mjs`, e usado em canonical, sitemap, Open Graph e JSON-LD).
+Domínio: https://www.desentupidoraprecobom24h.com.br (definido em `site`, no `astro.config.mjs`, e usado em canonical, sitemap, Open Graph e JSON-LD).
 
 ## Onde mexer
 

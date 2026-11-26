@@ -10,7 +10,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const DIST = 'dist';
-const DOMINIO = 'https://desentupidoraprecobom24h.com.br';
+const DOMINIO = 'https://www.desentupidoraprecobom24h.com.br';
 const PRACAS = {
   'rio-de-janeiro': ['21999070443', 'Rio de Janeiro'],
   'vila-velha': ['27997036946', 'Vila Velha'],
