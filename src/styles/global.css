@@ -420,3 +420,47 @@ body:has(.nav-mobile[open]) .float-cta { display: none; }
   content: ''; position: absolute; inset: 0; z-index: -1;
   background: linear-gradient(100deg, rgba(5, 35, 26, .93) 0%, rgba(5, 35, 26, .82) 42%, rgba(10, 58, 38, .38) 100%);
 }
+
+/* ajustes do topo: tudo centralizado, etiqueta de preço fina, botões menores */
+.hero-center { display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 860px; margin-inline: auto; }
+.hero-center .breadcrumbs ol { justify-content: center; }
+.hero-price {
+  display: inline-block; margin: 0 0 14px; padding: 4px 12px; border-radius: 999px; background: transparent;
+  border: 1px solid rgba(255, 198, 41, .7); color: var(--yellow); font-weight: 500; font-size: .78rem; line-height: 1.3; letter-spacing: .02em;
+}
+.hero-center .hero-lead { max-width: 620px; margin-inline: auto; font-size: clamp(1rem, 2.2vw, 1.15rem); }
+.hero-center .cta-buttons { justify-content: center; }
+.hero-center .hero-badges { justify-content: center; margin-top: 20px; gap: 8px; }
+.hero-badges li { padding: 5px 11px; font-size: .82rem; font-weight: 500; gap: 6px; }
+.hero-foto::before { background: linear-gradient(180deg, rgba(5, 35, 26, .86) 0%, rgba(5, 35, 26, .8) 55%, rgba(5, 35, 26, .9) 100%); }
+.hero-bg { object-position: 35% 25%; }
+.abertura { font-size: 1.12rem; }
+
+/* WhatsApp com texto branco; ligação em azul */
+:root { --wa: #128c4a; --wa-hover: #0f7a40; --call: #1565d8; --call-hover: #0f52b5; }
+.btn-wa, .float-wa { color: #fff; }
+.btn-wa { box-shadow: 0 10px 24px -12px rgba(18, 140, 74, .9); }
+.float-wa { box-shadow: 0 12px 30px -8px rgba(18, 140, 74, .9); }
+.btn-call, .hero .btn-call, .cta-band .btn-call, .side-card .btn-call { background: var(--call); color: #fff; border-color: var(--call); }
+.btn-call:hover { background: var(--call-hover); border-color: var(--call-hover); }
+.float-call { background: var(--call); color: #fff; border: 0; }
+.hero .btn-wa, .cta-band .btn-wa, .side-card .btn-wa { background: #17a558; }
+
+/* botões menores no celular, sem um cobrir o outro */
+.btn-lg { padding: 15px 24px; font-size: 1.15rem; }
+@media (max-width: 700px) {
+  .btn-lg { padding: 13px 18px; font-size: 1.05rem; }
+  .btn-md { padding: 11px 14px; font-size: 1rem; }
+  .hero .cta-buttons { flex-direction: column; align-items: stretch; width: 100%; max-width: 340px; gap: 10px; }
+  .float-cta { left: 10px; right: 10px; bottom: 10px; gap: 8px; }
+  .float-wa, .float-call, .float-city { height: 46px; font-size: 1rem; border-radius: 12px; }
+  .float-wa svg { width: 22px; height: 22px; }
+  .float-call svg, .float-city svg { width: 18px; height: 18px; }
+  h1 { font-size: clamp(2rem, 8.5vw, 2.4rem); }
+  .hero { padding-top: 28px; padding-bottom: 36px; }
+}
+@media (max-width: 700px) {
+  .hero-price { font-size: .66rem; padding: 3px 10px; letter-spacing: 0; white-space: nowrap; }
+  .hero-center .hero-badges { display: none; }
+}
+@media (max-width: 360px) { .hero-price { font-size: .6rem; } }

@@ -52,13 +52,14 @@ const crumbs = [
     breadcrumbSchema(crumbs),
   ]}
 >
-  <Hero cidade={cidade} local={local} lead={bairro.abertura} breadcrumbs={crumbs}>{bairro.h1}</Hero>
+  <Hero cidade={cidade} local={local} breadcrumbs={crumbs}>{bairro.h1}</Hero>
 
   <TrustStrip />
 
   <section class="section">
     <div class="container content-grid">
       <div class="prose">
+        <p class="abertura">{bairro.abertura}</p>
         <h2>{bairro.nome}: imóveis e entupimentos mais comuns</h2>
         <p>{bairro.imovel}</p>
         <p>{bairro.problema}</p>

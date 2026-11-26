@@ -49,10 +49,7 @@ const posts = (await getCollection('blog')).sort((a, b) => b.data.data.getTime()
   listarPracas
   schema={[faqSchema(faq), serviceSchema({ nome: 'Desentupidora 24 horas', descricao: site.description })]}
 >
-  <Hero
-    selo
-    lead="Pia, ralo, vaso, cano ou esgoto entupido? Escolha sua cidade e fale direto com a equipe da sua região. O técnico avalia no local e você só fecha se o valor fizer sentido."
-  >
+  <Hero selo>
     Desentupidora 24 horas com <em>preço bom de verdade</em>
   </Hero>
 
