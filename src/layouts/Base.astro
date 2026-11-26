@@ -1,0 +1,72 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/barlow-condensed/800.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FloatCta from '../components/FloatCta.astro';
+import GoogleTag from '../components/GoogleTag.astro';
+import { site, urlAbsoluta } from '../data/site';
+import { localBusinessSchema } from '../data/schema';
+import type { Cidade } from '../data/cidades';
+
+interface Props {
+  title: string;
+  description: string;
+  // Página de praça: define o telefone do cabeçalho, do botão flutuante, do rodapé e do JSON-LD
+  cidade?: Cidade;
+  // Nome do bairro, quando for página de bairro
+  bairro?: string;
+  // Página inicial: lista o contato de cada praça no JSON-LD
+  listarPracas?: boolean;
+  schema?: object[];
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const { title, description, cidade, bairro, listarPracas, schema = [], ogType = 'website', noindex = false } = Astro.props;
+// Canonical e Open Graph sempre a partir da variável única do domínio (astro.config)
+const canonical = urlAbsoluta(Astro.url.pathname);
+const ogImage = urlAbsoluta('/og.jpg');
+const local = cidade ? (bairro ? `${bairro}, ${cidade.nome} - ${cidade.uf}` : `${cidade.nome} - ${cidade.uf}`) : undefined;
+const jsonLd = [localBusinessSchema({ cidade, bairro, listarPracas }), ...schema];
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <meta name="theme-color" content="#0a3a26" />
+    {cidade && <meta name="geo.region" content={`BR-${cidade.uf}`} />}
+    {cidade && <meta name="geo.placename" content={bairro ? `${bairro}, ${cidade.nome}` : cidade.nome} />}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {jsonLd.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    <GoogleTag cidade={cidade?.nome} />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <Header cidade={cidade} local={local} />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <Footer cidade={cidade} local={local} />
+    <FloatCta cidade={cidade} local={local} />
+  </body>
+</html>

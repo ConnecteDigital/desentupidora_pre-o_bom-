@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import Porque from '../components/Porque.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { breadcrumbSchema } from '../data/schema';
+
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: 'Sobre', path: '/sobre/' },
+];
+---
+
+<Base
+  title="Sobre a Desentupidora Preço Bom"
+  description="Conheça a Desentupidora Preço Bom: só desentupimento, atendimento 24 horas, orçamento grátis no local e valor informado antes de o serviço começar."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <Hero cta={false} lead="Uma desentupidora com uma regra simples: ninguém paga para saber quanto custa." breadcrumbs={crumbs}>
+    Sobre a Desentupidora Preço Bom
+  </Hero>
+  <TrustStrip />
+  <section class="section">
+    <div class="container why-grid">
+      <div class="prose">
+        <h2>Como a gente trabalha</h2>
+        <p>
+          Entupimento quase sempre é urgência. E na urgência o cliente fica em desvantagem: aceita o primeiro que
+          aparece e só descobre o preço quando a conta chega. A Preço Bom existe para fazer do outro jeito.
+        </p>
+        <p>
+          O técnico vai até o endereço sem cobrar a visita, encontra o ponto do entupimento, explica o que precisa ser
+          feito e informa o valor. Só então você decide. Se aprovar, o serviço começa em seguida. Se não, fica por
+          isso mesmo.
+        </p>
+        <h2>O que fazemos e o que não fazemos</h2>
+        <p>
+          Fazemos desentupimento, e só: pia, ralo, vaso sanitário, cano, esgoto, coluna de prédio, rede pluvial, caixa
+          de gordura e hidrojateamento. Trabalhar com um único tipo de serviço permite levar o equipamento certo para
+          cada caso.
+        </p>
+        <h2>Para quem atendemos</h2>
+        <p>
+          Atendimento residencial e comercial: casas, apartamentos, condomínios, lojas, restaurantes e empresas, 24
+          horas por dia, todos os dias, inclusive domingos e feriados.
+        </p>
+        <p><a href="/area-de-atendimento/">Veja as cidades atendidas</a> ou <a href="/contato/">fale com a equipe da sua região</a>.</p>
+      </div>
+      <Porque />
+    </div>
+  </section>
+  <CtaBand />
+</Base>

@@ -1,0 +1,43 @@
+---
+// Cards das 6 praças, com telefone e WhatsApp de cada uma (página inicial e contato).
+import Icon from './Icon.astro';
+import { pracas, telefoneExibicao, telHref, whatsappHref } from '../data/pracas';
+import { cidadesDaPraca, cidadePath } from '../data/cidades';
+---
+
+<div class="pracas-grid">
+  {
+    pracas.map((p) => {
+      const cs = cidadesDaPraca(p.id);
+      const nomes = cs.map((c) => c.nome);
+      const local = nomes.length > 1 ? `${p.nome} (${nomes.join(', ')})` : `${nomes[0]} - ${p.uf}`;
+      return (
+        <article class="praca-card" id={`praca-${p.id}`}>
+          <header>
+            <span class="praca-uf">{p.uf}</span>
+            <h3>{p.nome}</h3>
+          </header>
+          <ul class="praca-cidades">
+            {cs.map((c) => (
+              <li>
+                {c.publicada ? (
+                  <a href={cidadePath(c)}>Desentupidora {c.locativo} <Icon name="arrow" size={14} /></a>
+                ) : (
+                  <span><Icon name="pin" size={14} /> {c.nome}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+          <div class="praca-acoes">
+            <a class="btn btn-wa btn-md" href={whatsappHref(p, local)} target="_blank" rel="noopener" data-cidade={p.nome}>
+              <Icon name="whatsapp" size={20} /> WhatsApp
+            </a>
+            <a class="btn btn-call btn-md" href={telHref(p)} data-cidade={p.nome}>
+              <Icon name="phone" size={18} /> {telefoneExibicao(p)}
+            </a>
+          </div>
+        </article>
+      );
+    })
+  }
+</div>

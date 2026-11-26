@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import TrustStrip from '../../components/TrustStrip.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { servicos, servicoPath } from '../../data/servicos';
+import { breadcrumbSchema, serviceSchema } from '../../data/schema';
+
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: 'Serviços', path: '/servicos/' },
+];
+const description =
+  'Serviços de desentupimento 24 horas: pia, ralo, vaso sanitário, cano, esgoto, coluna, rede pluvial, caixa de gordura e hidrojateamento. Orçamento grátis.';
+---
+
+<Base
+  title="Serviços de Desentupimento 24 Horas | Preço Bom"
+  description={description}
+  schema={[breadcrumbSchema(crumbs), serviceSchema({ nome: 'Serviços de desentupimento', descricao: description })]}
+>
+  <Hero
+    lead="Nove serviços, todos de desentupimento. Veja como cada um funciona e escolha sua cidade para falar com a equipe da sua região."
+    breadcrumbs={crumbs}
+  >
+    Serviços de desentupimento
+  </Hero>
+  <TrustStrip />
+  <section class="section section-soft">
+    <div class="container">
+      <div class="services-grid">
+        {servicos.map((s) => <ServiceCard servico={s} href={servicoPath(s)} />)}
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>

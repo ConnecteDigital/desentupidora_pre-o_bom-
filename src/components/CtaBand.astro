@@ -1,0 +1,29 @@
+---
+import CtaButtons from './CtaButtons.astro';
+import { mensagens } from '../data/site';
+import type { Cidade } from '../data/cidades';
+
+interface Props {
+  cidade?: Cidade;
+  local?: string;
+  title?: string;
+  text?: string;
+}
+
+const { cidade, local, title = 'Entupiu? Peça seu orçamento grátis agora', text } = Astro.props;
+const texto =
+  text ??
+  (cidade
+    ? `${mensagens.chegada}. Atendimento 24 horas ${cidade.locativo}, com o valor informado antes de o serviço começar.`
+    : `${mensagens.chegada}. Escolha sua cidade para falar com a equipe da sua região.`);
+---
+
+<section class="cta-band">
+  <div class="container cta-band-inner">
+    <div>
+      <h2>{title}</h2>
+      <p>{texto}</p>
+    </div>
+    <CtaButtons cidade={cidade} local={local} />
+  </div>
+</section>

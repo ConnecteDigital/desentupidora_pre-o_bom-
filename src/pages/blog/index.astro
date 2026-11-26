@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { breadcrumbSchema } from '../../data/schema';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: 'Blog', path: '/blog/' },
+];
+const fmt = new Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+
+<Base
+  title="Blog sobre Entupimento e Desentupimento | Preço Bom"
+  description="Artigos práticos sobre pia, vaso, ralo, caixa de gordura e hidrojateamento: o que tentar em casa, o que evitar e quando chamar uma desentupidora."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <Hero cta={false} lead="Orientações diretas para entender o entupimento, evitar que ele volte e saber a hora de chamar ajuda." breadcrumbs={crumbs}>
+    Blog da Preço Bom
+  </Hero>
+  <section class="section section-soft">
+    <div class="container posts">
+      {
+        posts.map((p) => (
+          <a class="post-card" href={`/blog/${p.id}/`}>
+            <time datetime={p.data.data.toISOString()}>{fmt.format(p.data.data)}</time>
+            <h2>{p.data.titulo}</h2>
+            <p>{p.data.resumo}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+  <CtaBand />
+</Base>

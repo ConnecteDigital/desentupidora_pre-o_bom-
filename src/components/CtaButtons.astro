@@ -1,0 +1,36 @@
+---
+// Botões de contato. Com cidade: WhatsApp e ligação da praça daquela cidade.
+// Sem cidade: seletor "Escolha sua cidade".
+import Icon from './Icon.astro';
+import CitySelect from './CitySelect.astro';
+import { contatoDaCidade, type Cidade } from '../data/cidades';
+
+interface Props {
+  cidade?: Cidade;
+  // entra na mensagem do WhatsApp (ex.: "Copacabana, Rio de Janeiro")
+  local?: string;
+  assunto?: string;
+  size?: 'md' | 'lg';
+  sufixo?: string;
+}
+
+const { cidade, local, assunto, size = 'lg', sufixo } = Astro.props;
+const c = cidade ? contatoDaCidade(cidade, local, assunto) : undefined;
+---
+
+<div class="cta-buttons">
+  {
+    c ? (
+      <>
+        <a class={`btn btn-wa btn-${size}`} href={c.whatsapp} target="_blank" rel="noopener" data-cidade={c.cidade}>
+          <Icon name="whatsapp" size={22} /> Chamar no WhatsApp
+        </a>
+        <a class={`btn btn-call btn-${size}`} href={c.tel} data-cidade={c.cidade}>
+          <Icon name="phone" size={20} /> Ligar {c.telefone}
+        </a>
+      </>
+    ) : (
+      <CitySelect size={size} sufixo={sufixo} />
+    )
+  }
+</div>

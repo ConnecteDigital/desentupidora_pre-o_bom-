@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import TrustStrip from '../../components/TrustStrip.astro';
+import ServicoConteudo from '../../components/ServicoConteudo.astro';
+import FaqList from '../../components/FaqList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { servicos, type Servico } from '../../data/servicos';
+import { faqSchema, servicoSchema, breadcrumbSchema } from '../../data/schema';
+
+export function getStaticPaths() {
+  return servicos.map((servico) => ({ params: { servico: servico.slug }, props: { servico } }));
+}
+
+interface Props {
+  servico: Servico;
+}
+
+const { servico } = Astro.props;
+const nomeSeo = servico.slug === 'limpeza-de-caixa-de-gordura' ? 'Limpeza de caixa de gordura' : servico.nome;
+const description = `${nomeSeo} 24 horas com orçamento grátis no local e sem taxa de visita. Chegamos em 20 minutos. Escolha sua cidade e chame.`;
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: 'Serviços', path: '/servicos/' },
+  { name: servico.nome, path: Astro.url.pathname },
+];
+---
+
+<Base
+  title={`${nomeSeo} 24 Horas | Preço Bom`}
+  description={description}
+  schema={[servicoSchema(servico), faqSchema(servico.faq), breadcrumbSchema(crumbs)]}
+>
+  <Hero lead={servico.resumo} breadcrumbs={crumbs} sufixo={`servicos/${servico.slug}/`}>{servico.nome} 24 horas</Hero>
+  <TrustStrip />
+  <ServicoConteudo servico={servico} />
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Perguntas frequentes</span>
+        <h2>Dúvidas sobre {servico.nome.toLowerCase()}</h2>
+      </div>
+      <FaqList items={servico.faq} />
+    </div>
+  </section>
+  <CtaBand />
+</Base>

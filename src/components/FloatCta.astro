@@ -1,0 +1,34 @@
+---
+// Celular: barra fixa Ligar | WhatsApp com o número da praça.
+// Computador: botão redondo do WhatsApp.
+// Página sem praça: botão "Escolha sua cidade", que leva à lista de cidades do rodapé.
+import Icon from './Icon.astro';
+import { contatoDaCidade, type Cidade } from '../data/cidades';
+
+interface Props {
+  cidade?: Cidade;
+  local?: string;
+}
+
+const { cidade, local } = Astro.props;
+const c = cidade ? contatoDaCidade(cidade, local) : undefined;
+---
+
+<div class="float-cta">
+  {
+    c ? (
+      <>
+        <a class="float-call" href={c.tel} data-cidade={c.cidade} aria-label={`Ligar para ${c.telefone}`}>
+          <Icon name="phone" size={22} /> <span>Ligar</span>
+        </a>
+        <a class="float-wa" href={c.whatsapp} target="_blank" rel="noopener" data-cidade={c.cidade} aria-label="Chamar no WhatsApp">
+          <Icon name="whatsapp" size={30} /> <span>WhatsApp</span>
+        </a>
+      </>
+    ) : (
+      <a class="float-city" href="#escolha-sua-cidade">
+        <Icon name="pin" size={22} /> <span>Escolha sua cidade</span>
+      </a>
+    )
+  }
+</div>

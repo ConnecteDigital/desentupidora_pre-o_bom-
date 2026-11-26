@@ -1,0 +1,64 @@
+---
+import Icon from './Icon.astro';
+import Brand from './Brand.astro';
+import { site, mensagens } from '../data/site';
+import { servicos, servicoPath } from '../data/servicos';
+import { cidades, cidadeDestino, cidadePath, contatoDaCidade, servicoNaCidadePath, type Cidade } from '../data/cidades';
+
+interface Props {
+  cidade?: Cidade;
+  local?: string;
+}
+
+const { cidade, local } = Astro.props;
+const c = cidade ? contatoDaCidade(cidade, local) : undefined;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <Brand href={cidade ? cidadePath(cidade) : '/'} tone="escuro" />
+      <p>
+        Desentupidora 24 horas{cidade ? ` ${cidade.locativo}` : ''}. Orçamento grátis no local, sem taxa de visita.
+        {mensagens.chegada}.
+      </p>
+      {
+        c && (
+          <ul class="footer-contact">
+            <li><a href={c.whatsapp} target="_blank" rel="noopener" data-cidade={c.cidade}><Icon name="whatsapp" size={18} /> WhatsApp {c.telefone}</a></li>
+            <li><a href={c.tel} data-cidade={c.cidade}><Icon name="phone" size={18} /> Ligar {c.telefone}</a></li>
+            <li><Icon name="clock" size={18} /> Aberto 24 horas, todos os dias</li>
+          </ul>
+        )
+      }
+    </div>
+    <div>
+      <h2 class="footer-title">Serviços{cidade ? ` ${cidade.locativo}` : ''}</h2>
+      <ul class="footer-links">
+        {servicos.map((s) => <li><a href={cidade ? servicoNaCidadePath(cidade, s.slug) : servicoPath(s)}>{s.nome}</a></li>)}
+      </ul>
+    </div>
+    <div id="escolha-sua-cidade">
+      <h2 class="footer-title">{cidade ? 'Outras cidades' : 'Escolha sua cidade'}</h2>
+      <ul class="footer-links">
+        {
+          cidades
+            .filter((x) => x.slug !== cidade?.slug)
+            .map((x) => <li><a href={cidadeDestino(x)}>Desentupidora {x.locativo}</a></li>)
+        }
+      </ul>
+      <h2 class="footer-title">Institucional</h2>
+      <ul class="footer-links">
+        <li><a href="/sobre/">Sobre</a></li>
+        <li><a href="/area-de-atendimento/">Área de atendimento</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/contato/">Contato</a></li>
+        <li><a href="/politica-de-privacidade/">Política de privacidade</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© {year} {site.name}. Todos os direitos reservados.</p>
+  </div>
+</footer>

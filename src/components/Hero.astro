@@ -1,0 +1,53 @@
+---
+// Topo das páginas. Ordem dos destaques: preço primeiro, depois título, contato e selos.
+import Icon from './Icon.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import CtaButtons from './CtaButtons.astro';
+import { mensagens } from '../data/site';
+import type { Cidade } from '../data/cidades';
+
+interface Props {
+  cidade?: Cidade;
+  local?: string;
+  assunto?: string;
+  sufixo?: string;
+  lead: string;
+  breadcrumbs?: { name: string; path: string }[];
+  // mostra o selo amarelo de preço ao lado (páginas principais)
+  selo?: boolean;
+  cta?: boolean;
+}
+
+const { cidade, local, assunto, sufixo, lead, breadcrumbs, selo = false, cta = true } = Astro.props;
+---
+
+<section class={`hero ${selo ? '' : 'page-hero'}`}>
+  <div class={`container ${selo ? 'hero-grid' : ''}`}>
+    <div>
+      {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+      <p class="hero-price"><Icon name="tag" size={18} /> {mensagens.preco}</p>
+      <h1><slot /></h1>
+      <p class="hero-lead">{lead}</p>
+      {cta && <CtaButtons cidade={cidade} local={local} assunto={assunto} sufixo={sufixo} />}
+      <ul class="hero-badges">
+        <li><Icon name="bolt" size={20} /> <span>{mensagens.chegada}</span></li>
+        <li><Icon name="clock" size={20} /> <span>Atendimento 24 horas</span></li>
+        <li><Icon name="check" size={20} /> <span>{mensagens.emergencia}</span></li>
+        <li><Icon name="casa" size={20} /> <span>Residencial e comercial</span></li>
+      </ul>
+    </div>
+    {
+      selo && (
+        <aside class="selo" aria-label="Preço bom de verdade">
+          <span class="selo-topo">Preço bom de verdade</span>
+          <strong>Orçamento grátis</strong>
+          <ul>
+            <li><Icon name="check" size={20} /> Feito no local, sem compromisso</li>
+            <li><Icon name="check" size={20} /> Sem taxa de visita</li>
+            <li><Icon name="check" size={20} /> Você sabe o valor antes do serviço começar</li>
+          </ul>
+        </aside>
+      )
+    }
+  </div>
+</section>

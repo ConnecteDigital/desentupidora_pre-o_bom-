@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { pracas } from '../data/pracas';
+import { cidadesDaPraca, cidadePath } from '../data/cidades';
+import { bairrosDaCidade, bairroPath } from '../data/bairros';
+import { breadcrumbSchema } from '../data/schema';
+
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: 'Área de atendimento', path: '/area-de-atendimento/' },
+];
+---
+
+<Base
+  title="Área de Atendimento | Desentupidora Preço Bom"
+  description="Cidades e bairros atendidos pela Desentupidora Preço Bom no RJ, ES, MT, MG e PB. Atendimento 24 horas com orçamento grátis no local."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <Hero lead="Atendemos nove cidades em cinco estados. Escolha a sua para ver os bairros e falar com a equipe da região." breadcrumbs={crumbs}>
+    Área de atendimento
+  </Hero>
+  <section class="section section-soft">
+    <div class="container zones">
+      {
+        pracas.map((p) => (
+          <div class="zone">
+            <h3><Icon name="pin" size={20} /> {p.nome} - {p.uf}</h3>
+            <ul>
+              {cidadesDaPraca(p.id).map((c) => (
+                <li>{c.publicada ? <a href={cidadePath(c)}>Desentupidora {c.locativo}</a> : <a href={`/#praca-${p.id}`}>{c.nome}</a>}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+  {
+    pracas.flatMap((p) => cidadesDaPraca(p.id)).filter((c) => c.publicada && bairrosDaCidade(c.slug).length > 0).map((c) => (
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Bairros atendidos {c.locativo}</h2>
+          </div>
+          <ul class="chips">
+            {bairrosDaCidade(c.slug).map((b) => <li><a href={bairroPath(c.slug, b)}>{b.nome}</a></li>)}
+          </ul>
+        </div>
+      </section>
+    ))
+  }
+  <CtaBand />
+</Base>

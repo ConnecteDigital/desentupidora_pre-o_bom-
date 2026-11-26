@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import PracaCards from '../components/PracaCards.astro';
+import { breadcrumbSchema } from '../data/schema';
+
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: 'Contato', path: '/contato/' },
+];
+---
+
+<Base
+  title="Contato: Telefone e WhatsApp | Desentupidora Preço Bom"
+  description="Fale com a Desentupidora Preço Bom: telefone e WhatsApp de cada região atendida. Atendimento 24 horas, orçamento grátis e sem taxa de visita."
+  listarPracas
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <Hero cta={false} lead="Cada região tem um número próprio, que vale para ligação e WhatsApp. O atendimento é 24 horas, todos os dias." breadcrumbs={crumbs}>
+    Contato
+  </Hero>
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Telefone e WhatsApp</span>
+        <h2>Fale com a equipe da sua região</h2>
+        <p>Ao chamar, diga o bairro e o que está acontecendo. Uma foto ou um vídeo curto ajudam a adiantar o atendimento.</p>
+      </div>
+      <PracaCards />
+    </div>
+  </section>
+</Base>

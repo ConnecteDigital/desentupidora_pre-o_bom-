@@ -1,0 +1,64 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Hero from '../../../components/Hero.astro';
+import TrustStrip from '../../../components/TrustStrip.astro';
+import ServicoConteudo from '../../../components/ServicoConteudo.astro';
+import FaqList from '../../../components/FaqList.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { servicos, type Servico } from '../../../data/servicos';
+import { cidadesPublicadas, cidadePath, type Cidade } from '../../../data/cidades';
+import { faqSchema, servicoSchema, breadcrumbSchema } from '../../../data/schema';
+
+export function getStaticPaths() {
+  return cidadesPublicadas.flatMap((cidade) =>
+    servicos.map((servico) => ({
+      params: { cidade: `desentupidora-em-${cidade.slug}`, servico: servico.slug },
+      props: { cidade, servico },
+    })),
+  );
+}
+
+interface Props {
+  cidade: Cidade;
+  servico: Servico;
+}
+
+const { cidade, servico } = Astro.props;
+const local = `${cidade.nome} - ${cidade.uf}`;
+const nomeSeo = servico.slug === 'limpeza-de-caixa-de-gordura' ? 'Limpeza de caixa de gordura' : servico.nome;
+const description = `${nomeSeo} ${cidade.locativo}, 24 horas. Orçamento grátis no local, sem taxa de visita. Chegamos em 20 minutos. Chame no WhatsApp.`;
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: cidade.nome, path: cidadePath(cidade) },
+  { name: servico.nome, path: Astro.url.pathname },
+];
+---
+
+<Base
+  title={`${nomeSeo} ${cidade.locativo} | Preço Bom`}
+  description={description}
+  cidade={cidade}
+  schema={[servicoSchema(servico, cidade), faqSchema(servico.faq), breadcrumbSchema(crumbs)]}
+>
+  <Hero
+    cidade={cidade}
+    local={local}
+    assunto={`preciso de ${servico.nome.toLowerCase()}`}
+    lead={servico.resumo}
+    breadcrumbs={crumbs}
+  >
+    {servico.nome} {cidade.locativo}
+  </Hero>
+  <TrustStrip />
+  <ServicoConteudo servico={servico} cidade={cidade} />
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Perguntas frequentes</span>
+        <h2>Dúvidas sobre {servico.nome.toLowerCase()}</h2>
+      </div>
+      <FaqList items={servico.faq} />
+    </div>
+  </section>
+  <CtaBand cidade={cidade} local={local} />
+</Base>

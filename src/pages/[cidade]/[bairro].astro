@@ -1,0 +1,130 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import TrustStrip from '../../components/TrustStrip.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import CtaButtons from '../../components/CtaButtons.astro';
+import FaqList from '../../components/FaqList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import type { Bairro } from '../../data/tipos';
+import { servicos, getServico } from '../../data/servicos';
+import { cidadesPublicadas, cidadePath, servicoNaCidadePath, type Cidade } from '../../data/cidades';
+import { bairrosDaCidade, vizinhosDoBairro } from '../../data/bairros';
+import { faqSchema, serviceSchema, breadcrumbSchema } from '../../data/schema';
+
+export function getStaticPaths() {
+  return cidadesPublicadas.flatMap((cidade) =>
+    bairrosDaCidade(cidade.slug).map((bairro) => ({
+      params: { cidade: `desentupidora-em-${cidade.slug}`, bairro: bairro.slug },
+      props: { cidade, bairro },
+    })),
+  );
+}
+
+interface Props {
+  cidade: Cidade;
+  bairro: Bairro;
+}
+
+const { cidade, bairro } = Astro.props;
+const local = `${bairro.nome}, ${cidade.nome} - ${cidade.uf}`;
+const indicado = getServico(bairro.servico);
+const vizinhos = vizinhosDoBairro(cidade.slug, bairro);
+const lista = new Intl.ListFormat('pt-BR', { style: 'long', type: 'conjunction' });
+
+const tituloBase = `Desentupidora em ${bairro.nome} - ${cidade.nome}`;
+const title = `${tituloBase} | Preço Bom`.length <= 62 ? `${tituloBase} | Preço Bom` : tituloBase;
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: cidade.nome, path: cidadePath(cidade) },
+  { name: bairro.nome, path: Astro.url.pathname },
+];
+---
+
+<Base
+  title={title}
+  description={bairro.metaDescription}
+  cidade={cidade}
+  bairro={bairro.nome}
+  schema={[
+    serviceSchema({ nome: `Desentupidora em ${bairro.nome}`, descricao: bairro.metaDescription, cidade, bairro: bairro.nome }),
+    faqSchema(bairro.faq),
+    breadcrumbSchema(crumbs),
+  ]}
+>
+  <Hero cidade={cidade} local={local} lead={bairro.abertura} breadcrumbs={crumbs}>{bairro.h1}</Hero>
+
+  <TrustStrip />
+
+  <section class="section">
+    <div class="container content-grid">
+      <div class="prose">
+        <h2>{bairro.nome}: imóveis e entupimentos mais comuns</h2>
+        <p>{bairro.imovel}</p>
+        <p>{bairro.problema}</p>
+        <p>
+          Serviço mais pedido por aqui:
+          <a href={servicoNaCidadePath(cidade, indicado.slug)}>{indicado.nome.toLowerCase()} {cidade.locativo}</a>.
+        </p>
+
+        <h2>Onde atendemos em {bairro.nome}</h2>
+        <p>
+          Atendemos o bairro inteiro, incluindo a região de {lista.format(bairro.referencias)}. Ao chamar, informe a rua
+          e um ponto de referência para o técnico ir direto ao endereço.
+        </p>
+        <div class="nota">
+          <p>
+            <strong>Chegamos em 20 minutos.</strong> O orçamento é grátis, feito no local e sem compromisso. Não há taxa
+            de visita e você sabe o valor antes do serviço começar.
+          </p>
+        </div>
+
+        <h2>Bairros vizinhos</h2>
+        <p>Também atendemos ao redor de {bairro.nome}, na {bairro.zona.startsWith('Centro') ? 'região central' : bairro.zona} {cidade.genitivo}:</p>
+        <ul class="chips">
+          {vizinhos.map((v) => <li>{v.path ? <a href={v.path}>{v.nome}</a> : <span>{v.nome}</span>}</li>)}
+          <li><a href={`${cidadePath(cidade)}#bairros`}>Todos os bairros {cidade.genitivo}</a></li>
+        </ul>
+      </div>
+
+      <aside class="sidebar">
+        <div class="side-card">
+          <h2>Orçamento grátis em {bairro.nome}</h2>
+          <p>Atendimento 24 horas, todos os dias, inclusive domingos e feriados.</p>
+          <CtaButtons cidade={cidade} local={local} size="md" />
+        </div>
+        <div class="side-list">
+          <h2>Serviços {cidade.locativo}</h2>
+          <ul>
+            {servicos.map((s) => <li><a href={servicoNaCidadePath(cidade, s.slug)}>{s.nome}</a></li>)}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Perguntas frequentes</span>
+        <h2>Dúvidas de quem mora ou trabalha em {bairro.nome}</h2>
+      </div>
+      <FaqList items={bairro.faq} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Serviços</span>
+        <h2>O que desentupimos em {bairro.nome}</h2>
+        <p>Atendimento residencial e comercial: casas, apartamentos, condomínios, lojas, restaurantes e empresas.</p>
+      </div>
+      <div class="services-grid">
+        {servicos.map((s) => <ServiceCard servico={s} href={servicoNaCidadePath(cidade, s.slug)} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand cidade={cidade} local={local} title={`Entupiu em ${bairro.nome}? Peça o orçamento grátis`} />
+</Base>

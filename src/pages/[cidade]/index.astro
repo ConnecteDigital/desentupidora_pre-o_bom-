@@ -1,0 +1,125 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import TrustStrip from '../../components/TrustStrip.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import Porque from '../../components/Porque.astro';
+import Passos from '../../components/Passos.astro';
+import FaqList from '../../components/FaqList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { servicos } from '../../data/servicos';
+import { cidadesPublicadas, servicoNaCidadePath, type Cidade } from '../../data/cidades';
+import { bairrosPorZona, bairroPath } from '../../data/bairros';
+import { faqSchema, serviceSchema, breadcrumbSchema } from '../../data/schema';
+
+export function getStaticPaths() {
+  return cidadesPublicadas.map((cidade) => ({
+    params: { cidade: `desentupidora-em-${cidade.slug}` },
+    props: { cidade },
+  }));
+}
+
+interface Props {
+  cidade: Cidade;
+}
+
+const { cidade } = Astro.props;
+const local = `${cidade.nome} - ${cidade.uf}`;
+const zonas = bairrosPorZona(cidade.slug);
+const faq = cidade.faq ?? [];
+const description = `Desentupidora 24 horas ${cidade.locativo} com orçamento grátis no local e sem taxa de visita. Chegamos em 20 minutos. Pia, ralo, vaso, esgoto e mais.`;
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: `Desentupidora ${cidade.locativo}`, path: Astro.url.pathname },
+];
+---
+
+<Base
+  title={`Desentupidora 24 Horas ${cidade.locativo} | Preço Bom`}
+  description={description}
+  cidade={cidade}
+  schema={[
+    serviceSchema({ nome: `Desentupidora 24 horas ${cidade.locativo}`, descricao: description, cidade }),
+    faqSchema(faq),
+    breadcrumbSchema(crumbs),
+  ]}
+>
+  <Hero selo cidade={cidade} local={local} lead={cidade.heroLead ?? ''}>
+    Desentupidora 24 horas <em>{cidade.locativo}</em>
+  </Hero>
+
+  <TrustStrip />
+
+  <section class="section section-soft" id="servicos">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Serviços</span>
+        <h2>Serviços de desentupimento {cidade.locativo}</h2>
+        <p>Atendimento residencial e comercial: casas, apartamentos, condomínios, lojas, restaurantes e empresas.</p>
+      </div>
+      <div class="services-grid">
+        {servicos.map((s) => <ServiceCard servico={s} href={servicoNaCidadePath(cidade, s.slug)} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container why-grid">
+      <div class="why-text">
+        <span class="eyebrow">Por que a Preço Bom</span>
+        <h2>Preço justo para quem mora e trabalha {cidade.locativo}</h2>
+        {(cidade.perfil ?? []).map((p) => <p>{p}</p>)}
+      </div>
+      <Porque />
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Como funciona</span>
+        <h2>Do chamado ao cano livre</h2>
+      </div>
+      <Passos local={cidade.locativo} />
+    </div>
+  </section>
+
+  {
+    zonas.length > 0 && (
+      <section class="section section-soft" id="bairros">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Bairros atendidos</span>
+            <h2>Desentupidora nos bairros {cidade.genitivo}</h2>
+            <p>Cada bairro tem uma página com as situações mais comuns por lá. Se o seu não estiver na lista, chame mesmo assim: atendemos a cidade toda.</p>
+          </div>
+          <div class="zones">
+            {zonas.map((g) => (
+              <div class="zone">
+                <h3><Icon name="pin" size={20} /> {g.zona}</h3>
+                <ul>
+                  {g.bairros.map((b) => (
+                    <li><a href={bairroPath(cidade.slug, b)}>{b.nome}</a></li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Perguntas frequentes</span>
+        <h2>Dúvidas sobre desentupimento {cidade.locativo}</h2>
+      </div>
+      <FaqList items={faq} />
+    </div>
+  </section>
+
+  <CtaBand cidade={cidade} local={local} />
+</Base>

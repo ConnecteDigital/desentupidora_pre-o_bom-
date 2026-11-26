@@ -1,0 +1,30 @@
+---
+// Seletor "Escolha sua cidade": usado nas páginas sem praça, no lugar do telefone.
+// Cada opção leva à página da cidade.
+import Icon from './Icon.astro';
+import { cidades, cidadeDestino } from '../data/cidades';
+
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+  // caminho dentro da cidade (ex.: "servicos/hidrojateamento/"), para páginas de serviço geral
+  sufixo?: string;
+  align?: 'left' | 'right';
+}
+
+const { size = 'lg', sufixo = '', align = 'left' } = Astro.props;
+---
+
+<details class={`city-select city-select-${align}`} data-fecha>
+  <summary class={`btn btn-city btn-${size}`}><Icon name="pin" size={20} /> Escolha sua cidade</summary>
+  <ul>
+    {
+      cidades.map((c) => (
+        <li>
+          <a href={c.publicada ? `${cidadeDestino(c)}${sufixo}` : cidadeDestino(c)}>
+            {c.nome} <span>{c.uf}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>

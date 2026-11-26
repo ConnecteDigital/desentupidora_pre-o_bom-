@@ -1,0 +1,122 @@
+---
+import Icon from './Icon.astro';
+import Brand from './Brand.astro';
+import CitySelect from './CitySelect.astro';
+import { mensagens } from '../data/site';
+import { servicos, servicoPath } from '../data/servicos';
+import { cidades, cidadeDestino, cidadePath, contatoDaCidade, servicoNaCidadePath, type Cidade } from '../data/cidades';
+
+interface Props {
+  cidade?: Cidade;
+  local?: string;
+}
+
+const { cidade, local } = Astro.props;
+const c = cidade ? contatoDaCidade(cidade, local) : undefined;
+const home = cidade ? cidadePath(cidade) : '/';
+const linkServico = (slug: string) =>
+  cidade ? servicoNaCidadePath(cidade, slug) : servicoPath(servicos.find((s) => s.slug === slug)!);
+const linkServicos = cidade ? `${cidadePath(cidade)}#servicos` : '/servicos/';
+---
+
+<header class="site-header">
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span><span class="pulse" aria-hidden="true"></span> Atendimento 24 horas · {mensagens.chegada}</span>
+      {
+        c ? (
+          <a href={c.tel} class="topbar-phone" data-cidade={c.cidade}><Icon name="phone" size={16} /> {c.telefone}</a>
+        ) : (
+          <a href="#escolha-sua-cidade" class="topbar-phone"><Icon name="pin" size={16} /> Escolha sua cidade</a>
+        )
+      }
+    </div>
+  </div>
+  <div class="container header-inner">
+    <Brand href={home} />
+
+    <nav class="nav-desktop" aria-label="Principal">
+      <div class="nav-item has-sub">
+        <a href={linkServicos} aria-haspopup="true">Serviços <span class="caret" aria-hidden="true"></span></a>
+        <div class="submenu submenu-servicos">
+          <ul>
+            {servicos.map((s) => (
+              <li><a href={linkServico(s.slug)}><Icon name={s.icon} size={18} /> {s.nome}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      {
+        cidade ? (
+          <div class="nav-item"><a href={`${cidadePath(cidade)}#bairros`}>Bairros</a></div>
+        ) : (
+          <div class="nav-item has-sub">
+            <a href="/area-de-atendimento/" aria-haspopup="true">Cidades <span class="caret" aria-hidden="true"></span></a>
+            <div class="submenu submenu-cidades">
+              <ul>
+                {cidades.map((x) => (
+                  <li><a href={cidadeDestino(x)}><Icon name="pin" size={16} /> {x.nome} - {x.uf}</a></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )
+      }
+      <div class="nav-item"><a href="/blog/">Blog</a></div>
+      <div class="nav-item"><a href="/sobre/">Sobre</a></div>
+      <div class="nav-item"><a href="/contato/">Contato</a></div>
+    </nav>
+
+    <div class="header-cta">
+      {
+        c ? (
+          <a class="btn btn-wa btn-sm" href={c.whatsapp} target="_blank" rel="noopener" data-cidade={c.cidade}>
+            <Icon name="whatsapp" size={18} /> <span>WhatsApp</span>
+          </a>
+        ) : (
+          <span class="header-city"><CitySelect size="sm" align="right" /></span>
+        )
+      }
+      <details class="nav-mobile" data-fecha>
+        <summary aria-label="Abrir menu"><span></span><span></span><span></span></summary>
+        <nav aria-label="Menu">
+          <details class="mobile-sub">
+            <summary>Serviços</summary>
+            <ul>
+              {servicos.map((s) => (
+                <li><a href={linkServico(s.slug)}><Icon name={s.icon} size={18} /> {s.nome}</a></li>
+              ))}
+            </ul>
+          </details>
+          {
+            cidade ? (
+              <a href={`${cidadePath(cidade)}#bairros`}>Bairros atendidos</a>
+            ) : (
+              <details class="mobile-sub">
+                <summary>Cidades</summary>
+                <ul>
+                  {cidades.map((x) => (
+                    <li><a href={cidadeDestino(x)}><Icon name="pin" size={16} /> {x.nome} - {x.uf}</a></li>
+                  ))}
+                </ul>
+              </details>
+            )
+          }
+          <a href="/blog/">Blog</a>
+          <a href="/sobre/">Sobre</a>
+          <a href="/contato/">Contato</a>
+          {c && <a href={c.tel} data-cidade={c.cidade}><Icon name="phone" size={18} /> Ligar: {c.telefone}</a>}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  // Fecha menus abertos (menu do celular e seletor de cidade) ao tocar fora ou escolher um link.
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('details[data-fecha][open]').forEach(function (d) {
+      if (!d.contains(e.target) || (e.target.closest && e.target.closest('a'))) d.open = false;
+    });
+  });
+</script>

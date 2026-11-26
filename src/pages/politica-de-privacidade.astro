@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import { site } from '../data/site';
+import { breadcrumbSchema } from '../data/schema';
+
+const crumbs = [
+  { name: 'Início', path: '/' },
+  { name: 'Política de privacidade', path: '/politica-de-privacidade/' },
+];
+---
+
+<Base
+  title="Política de Privacidade | Desentupidora Preço Bom"
+  description="Saiba quais dados o site da Desentupidora Preço Bom coleta, para que são usados e como pedir a exclusão."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <Hero cta={false} lead="Quais dados este site coleta, para que servem e como você pode pedir a exclusão." breadcrumbs={crumbs}>
+    Política de privacidade
+  </Hero>
+  <section class="section">
+    <div class="container article prose">
+      <h2>Dados que você nos envia</h2>
+      <p>
+        Este site não tem formulário de cadastro. O contato acontece por ligação ou pelo WhatsApp. Quando você nos
+        chama, recebemos o seu número de telefone e as informações que decidir enviar, como nome, endereço do
+        atendimento, fotos e vídeos do problema. Usamos esses dados apenas para prestar o atendimento solicitado.
+      </p>
+      <h2>Dados de navegação</h2>
+      <p>
+        O site pode usar cookies e a tag do Google para medir visitas e registrar cliques nos botões de ligação e de
+        WhatsApp. Essas informações servem para avaliar o desempenho de anúncios e do próprio site, e são tratadas de
+        forma agregada. Você pode bloquear cookies nas configurações do seu navegador.
+      </p>
+      <h2>Compartilhamento</h2>
+      <p>
+        Não vendemos dados pessoais. As informações podem ser processadas por fornecedores de tecnologia usados no
+        atendimento e na medição do site, como WhatsApp e Google, conforme as políticas de cada um.
+      </p>
+      <h2>Seus direitos</h2>
+      <p>
+        Conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode pedir a confirmação, a correção ou a
+        exclusão dos seus dados. Para isso, fale com a {site.name} pelo WhatsApp da sua região, disponível na página de
+        <a href="/contato/">contato</a>.
+      </p>
+      <h2>Alterações</h2>
+      <p>Esta política pode ser atualizada. A versão em vigor é sempre a publicada nesta página.</p>
+    </div>
+  </section>
+</Base>

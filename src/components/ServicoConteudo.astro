@@ -1,0 +1,88 @@
+---
+// Corpo da página de serviço, usado na versão geral e na versão de cada cidade.
+import CtaButtons from './CtaButtons.astro';
+import type { Servico } from '../data/servicos';
+import { servicos, servicoPath } from '../data/servicos';
+import { cidades, cidadeDestino, cidadePath, servicoNaCidadePath, type Cidade } from '../data/cidades';
+import { bairrosDaCidade, bairroPath } from '../data/bairros';
+
+interface Props {
+  servico: Servico;
+  cidade?: Cidade;
+}
+
+const { servico, cidade } = Astro.props;
+const local = cidade ? `${cidade.nome} - ${cidade.uf}` : undefined;
+const assunto = `preciso de ${servico.nome.toLowerCase()}`;
+const fraseCidade = cidade?.servicos?.[servico.slug];
+const bairros = cidade ? bairrosDaCidade(cidade.slug) : [];
+const outros = servicos.filter((s) => s.slug !== servico.slug);
+---
+
+<section class="section">
+  <div class="container content-grid">
+    <div class="prose">
+      <h2>Entenda o problema</h2>
+      {fraseCidade && <p>{fraseCidade}</p>}
+      {servico.intro.map((p) => <p>{p}</p>)}
+
+      <h2>Sinais de que está na hora de chamar</h2>
+      <ul>
+        {servico.sinais.map((s) => <li>{s}</li>)}
+      </ul>
+
+      <h2>Como fazemos o serviço</h2>
+      <ol>
+        {servico.comoFazemos.map((s) => <li>{s}</li>)}
+      </ol>
+      <div class="nota">
+        <p>
+          <strong>Preço bom de verdade:</strong> orçamento grátis no local, sem compromisso e sem taxa de visita. Você
+          sabe o valor antes do serviço começar.
+        </p>
+      </div>
+
+      {
+        cidade ? (
+          bairros.length > 0 && (
+            <>
+              <h2>Bairros atendidos {cidade.locativo}</h2>
+              <ul class="chips">
+                {bairros.map((b) => <li><a href={bairroPath(cidade.slug, b)}>{b.nome}</a></li>)}
+              </ul>
+            </>
+          )
+        ) : (
+          <>
+            <h2>Escolha sua cidade</h2>
+            <p>O telefone e o WhatsApp mudam conforme a região. Selecione a sua para falar com a equipe certa:</p>
+            <ul class="chips">
+              {cidades.map((c) => (
+                <li>
+                  <a href={c.publicada ? servicoNaCidadePath(c, servico.slug) : cidadeDestino(c)}>
+                    {c.nome} - {c.uf}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </div>
+
+    <aside class="sidebar">
+      <div class="side-card">
+        <h2>Orçamento grátis{cidade ? ` ${cidade.locativo}` : ''}</h2>
+        <p>Chegamos em 20 minutos. Atendimento 24 horas, inclusive domingos e feriados.</p>
+        <CtaButtons cidade={cidade} local={local} assunto={assunto} size="md" sufixo={`servicos/${servico.slug}/`} />
+      </div>
+      <div class="side-list">
+        <h2>Outros serviços</h2>
+        <ul>
+          {outros.map((s) => <li><a href={cidade ? servicoNaCidadePath(cidade, s.slug) : servicoPath(s)}>{s.nome}</a></li>)}
+          {cidade && <li><a href={cidadePath(cidade)}><strong>Desentupidora {cidade.locativo}</strong></a></li>}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>

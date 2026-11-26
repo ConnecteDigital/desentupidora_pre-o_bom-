@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import PracaCards from '../components/PracaCards.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import Porque from '../components/Porque.astro';
+import Passos from '../components/Passos.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, mensagens } from '../data/site';
+import { servicos, servicoPath } from '../data/servicos';
+import { faqSchema, serviceSchema } from '../data/schema';
+import { getCollection } from 'astro:content';
+
+const faq = [
+  {
+    q: 'Em quais cidades a Desentupidora Preço Bom atende?',
+    a: 'Rio de Janeiro e Petrópolis (RJ), Vila Velha, Vitória, Serra e Cariacica (ES), Cuiabá (MT), Juiz de Fora (MG) e João Pessoa (PB). Cada região tem um telefone próprio, que também é o WhatsApp.',
+  },
+  {
+    q: 'O orçamento é mesmo grátis?',
+    a: 'Sim. O orçamento é feito no local, é grátis e sem compromisso. Não cobramos taxa de visita e você sabe o valor antes de o serviço começar.',
+  },
+  {
+    q: 'Vocês atendem de madrugada, domingo e feriado?',
+    a: 'Sim. O atendimento é 24 horas, todos os dias, inclusive domingos e feriados, e inclui serviços emergenciais.',
+  },
+  {
+    q: 'Em quanto tempo a equipe chega?',
+    a: 'Chegamos em 20 minutos. Informe a cidade e o bairro ao chamar para agilizar o atendimento.',
+  },
+  {
+    q: 'Quais serviços a empresa faz?',
+    a: 'Somente desentupimento: pia, ralo, vaso sanitário, cano, esgoto, coluna de prédio, rede pluvial, caixa de gordura e hidrojateamento.',
+  },
+  {
+    q: 'Atendem empresas e condomínios?',
+    a: 'Sim. O atendimento é residencial e comercial: casas, apartamentos, condomínios, lojas, restaurantes e empresas.',
+  },
+];
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.data.getTime() - a.data.data.getTime()).slice(0, 3);
+---
+
+<Base
+  title="Desentupidora 24 Horas com Orçamento Grátis | Preço Bom"
+  description={site.description}
+  listarPracas
+  schema={[faqSchema(faq), serviceSchema({ nome: 'Desentupidora 24 horas', descricao: site.description })]}
+>
+  <Hero
+    selo
+    lead="Pia, ralo, vaso, cano ou esgoto entupido? Escolha sua cidade e fale direto com a equipe da sua região. O técnico avalia no local e você só fecha se o valor fizer sentido."
+  >
+    Desentupidora 24 horas com <em>preço bom de verdade</em>
+  </Hero>
+
+  <TrustStrip />
+
+  <section class="section section-soft" id="pracas">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Onde atendemos</span>
+        <h2>Escolha sua cidade e chame agora</h2>
+        <p>Cada região tem um número próprio, que vale para ligação e WhatsApp. Toque na sua para falar com a equipe certa.</p>
+      </div>
+      <PracaCards />
+    </div>
+  </section>
+
+  <section class="section" id="servicos">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">O que fazemos</span>
+        <h2>Só desentupimento, do ralo à rede de esgoto</h2>
+        <p>Trabalhamos com uma coisa só. Por isso a equipe chega com o equipamento certo para cada tipo de entupimento.</p>
+      </div>
+      <div class="services-grid">
+        {servicos.map((s) => <ServiceCard servico={s} href={servicoPath(s)} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container why-grid">
+      <div class="why-text">
+        <span class="eyebrow">Por que a Preço Bom</span>
+        <h2>Transparência no valor, do primeiro contato ao fim do serviço</h2>
+        <p>
+          Quem está com esgoto voltando pelo ralo não tem tempo de pesquisar preço, e é nessa hora que muita gente paga
+          mais do que devia. A nossa proposta é o contrário: o técnico vai até você, mostra onde está o problema e diz
+          quanto custa resolver. Só depois disso você decide.
+        </p>
+        <p>
+          {mensagens.publico}: {mensagens.publicoDetalhe.toLowerCase()}.
+        </p>
+      </div>
+      <Porque />
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Como funciona</span>
+        <h2>Três passos, sem surpresa no final</h2>
+      </div>
+      <Passos />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Blog</span>
+        <h2>Antes de chamar, vale a leitura</h2>
+        <p>Orientações práticas para entender o entupimento e evitar que ele volte.</p>
+      </div>
+      <div class="posts">
+        {
+          posts.map((p) => (
+            <a class="post-card" href={`/blog/${p.id}/`}>
+              <h3>{p.data.titulo}</h3>
+              <p>{p.data.resumo}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Perguntas frequentes</span>
+        <h2>Dúvidas comuns antes de chamar</h2>
+      </div>
+      <FaqList items={faq} />
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

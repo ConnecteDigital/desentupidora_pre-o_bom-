@@ -1,0 +1,12 @@
+---
+interface Props {
+  local?: string;
+}
+const { local } = Astro.props;
+---
+
+<div class="steps">
+  <div class="step-card"><h3>Você chama</h3><p>Ligue ou mande mensagem no WhatsApp dizendo o que entupiu e {local ? `em que ponto ${local} você está` : 'onde você está'}. Foto ou vídeo ajudam.</p></div>
+  <div class="step-card"><h3>Orçamento grátis no local</h3><p>Chegamos em 20 minutos. O técnico localiza o entupimento, explica o que encontrou e informa o valor, sem taxa de visita.</p></div>
+  <div class="step-card"><h3>Você aprova, a gente desentope</h3><p>Com o valor combinado, o serviço começa em seguida e só termina depois do teste de escoamento.</p></div>
+</div>
