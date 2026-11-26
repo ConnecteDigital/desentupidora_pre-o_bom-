@@ -23,7 +23,7 @@ const PRACAS = {
   'joao-pessoa': ['83991367518', 'João Pessoa'],
 };
 const COM_CARDS = new Set(['/', '/contato/']);
-const PROIBIDOS = [/fossa/i, /dedetiza/i, /encanador/i, /vazamento/i, /garantia/i, /Bom Preço/i, /R\$/, /vercel\.app/i, /Preço Bom 24/i, /a partir de (R|\d)/i];
+const PROIBIDOS = [/fossa/i, /dedetiza/i, /encanador/i, /vazamento/i, /garantia/i, /Bom Preço/i, /R\$/, /vercel\.app/i, /Preço Bom 24/i, /a partir de (R\$|\d)/i];
 
 async function* andar(dir) {
   for (const e of await readdir(dir, { withFileTypes: true })) {

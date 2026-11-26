@@ -2,6 +2,7 @@
 // que define o telefone. As quatro cidades do Espírito Santo usam o mesmo número.
 
 import type { Faq, ServicoSlug } from './tipos';
+import { textosDasCidades } from './cidades-textos';
 import { getPraca, telefoneExibicao, telHref, whatsappHref, type PracaId } from './pracas';
 
 export interface Cidade {
@@ -26,7 +27,7 @@ export interface Cidade {
   faq?: Faq[];
 }
 
-export const cidades: Cidade[] = [
+const base: Cidade[] = [
   {
     slug: 'rio-de-janeiro',
     nome: 'Rio de Janeiro',
@@ -99,6 +100,32 @@ export const cidades: Cidade[] = [
   { slug: 'juiz-de-fora', nome: 'Juiz de Fora', uf: 'MG', estado: 'Minas Gerais', pracaId: 'juiz-de-fora', locativo: 'em Juiz de Fora', genitivo: 'de Juiz de Fora', publicada: false },
   { slug: 'joao-pessoa', nome: 'João Pessoa', uf: 'PB', estado: 'Paraíba', pracaId: 'joao-pessoa', locativo: 'em João Pessoa', genitivo: 'de João Pessoa', publicada: false },
 ];
+
+const faqPadrao = (c: Cidade): Faq[] => [
+  {
+    q: `A Desentupidora Preço Bom atende 24 horas ${c.locativo}?`,
+    a: `Sim. O atendimento ${c.locativo} é 24 horas, todos os dias, inclusive domingos e feriados, para casas, apartamentos, condomínios e empresas.`,
+  },
+  {
+    q: `Quanto custa um desentupimento ${c.locativo}?`,
+    a: 'Depende do tipo de entupimento, do ponto onde ele está e do equipamento necessário. O orçamento é feito no local, é grátis e sem compromisso: você sabe o valor antes de o serviço começar.',
+  },
+  {
+    q: `Tem taxa de visita ${c.locativo}?`,
+    a: 'Não. A ida do técnico para avaliar e passar o orçamento não é cobrada. Você só paga se aprovar o serviço.',
+  },
+  {
+    q: `Em quanto tempo a equipe chega ${c.locativo}?`,
+    a: 'Chegamos em 20 minutos. Ao ligar ou mandar mensagem no WhatsApp, informe o bairro e o que está acontecendo.',
+  },
+];
+
+// Junta os textos próprios de cada cidade (cidades-textos.ts). Cidade com textos fica publicada.
+export const cidades: Cidade[] = base.map((c) => {
+  const t = textosDasCidades[c.slug];
+  if (!t) return c;
+  return { ...c, publicada: true, heroLead: t.heroLead, perfil: t.perfil, servicos: t.servicos, faq: [...faqPadrao(c), ...t.faqLocal] };
+});
 
 export const cidadesPublicadas = cidades.filter((c) => c.publicada);
 

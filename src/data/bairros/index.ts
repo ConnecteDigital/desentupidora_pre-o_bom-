@@ -4,9 +4,25 @@
 
 import type { Bairro } from '../tipos';
 import { bairros as rioDeJaneiro } from './rio-de-janeiro';
+import { bairros as vilaVelha } from './vila-velha';
+import { bairros as vitoria } from './vitoria';
+import { bairros as serra } from './serra';
+import { bairros as cariacica } from './cariacica';
+import { bairros as petropolis } from './petropolis';
+import { bairros as cuiaba } from './cuiaba';
+import { bairros as juizDeFora } from './juiz-de-fora';
+import { bairros as joaoPessoa } from './joao-pessoa';
 
 const porCidade: Record<string, Bairro[]> = {
   'rio-de-janeiro': rioDeJaneiro,
+  'vila-velha': vilaVelha,
+  'vitoria': vitoria,
+  'serra': serra,
+  'cariacica': cariacica,
+  'petropolis': petropolis,
+  'cuiaba': cuiaba,
+  'juiz-de-fora': juizDeFora,
+  'joao-pessoa': joaoPessoa,
 };
 
 export function bairrosDaCidade(cidadeSlug: string): Bairro[] {

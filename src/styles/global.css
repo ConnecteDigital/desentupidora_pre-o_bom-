@@ -415,8 +415,8 @@ body:has(.nav-mobile[open]) .float-cta { display: none; }
 
 /* topo com foto real escurecida em verde */
 .hero-foto { isolation: isolate; }
-.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 30%; z-index: -2; }
+.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 20% 25%; z-index: -2; }
 .hero-foto::before {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(100deg, rgba(5, 35, 26, .94) 0%, rgba(5, 35, 26, .86) 45%, rgba(10, 58, 38, .62) 100%);
+  background: linear-gradient(100deg, rgba(5, 35, 26, .93) 0%, rgba(5, 35, 26, .82) 42%, rgba(10, 58, 38, .38) 100%);
 }
