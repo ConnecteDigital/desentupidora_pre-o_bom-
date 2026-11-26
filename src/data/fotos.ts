@@ -8,7 +8,11 @@ const alts: Record<string, string> = {
   'desentupimento-de-pia': 'Técnico de luvas passando o cabo da máquina pelo ralo da pia',
   'desentupimento-de-ralo': 'Grelha do ralo sendo retirada com sujeira acumulada',
   'desentupimento-de-vaso-sanitario': 'Cabo de desentupimento sendo passado pelo vaso sanitário',
-  'desentupimento-de-esgoto': 'Máquina de cabo rotativo desobstruindo a rede de esgoto pela caixa na calçada',
+  'desentupimento-de-cano': 'Máquina de cabo rotativo desobstruindo um cano pela caixa na calçada',
+  'desentupimento-de-esgoto': 'Caixa de esgoto aberta sendo desobstruída com mangueira',
+  'desentupimento-de-coluna': 'Técnico operando máquina rotativa no tubo de queda de um prédio',
+  'desentupimento-de-rede-pluvial': 'Mangueira entrando em um poço de visita da rede de água de chuva na rua',
+  'limpeza-de-caixa-de-gordura': 'Técnico com máquina de desentupimento em uma caixa no piso externo',
 };
 
 export interface Foto {

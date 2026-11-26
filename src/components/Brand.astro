@@ -1,7 +1,8 @@
 ---
-// Marca em texto enquanto a logo nova não chega.
-// Quando o arquivo logo-preco-bom.svg estiver na pasta do projeto, troque o conteúdo
-// deste componente por uma <img> (com width e height) apontando para ele.
+// Logo da marca. Arquivo: src/assets/logo.webp (para trocar, substitua o arquivo).
+// No rodapé (fundo escuro) a logo fica sobre uma etiqueta branca.
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.webp';
 import { site } from '../data/site';
 
 interface Props {
@@ -13,8 +14,5 @@ const { href = '/', tone = 'claro' } = Astro.props;
 ---
 
 <a href={href} class={`brand brand-${tone}`} aria-label={`${site.name}, página inicial`}>
-  <span class="brand-mark" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.500S5.500 9.900 5.500 14.600a6.500 6.500 0 0 0 13 0C18.500 9.900 12 2.500 12 2.500z"/></svg>
-  </span>
-  <span class="brand-text"><small>Desentupidora</small><strong>Preço Bom</strong></span>
+  <Image src={logo} alt={site.name} width={132} densities={[1, 2]} loading={tone === 'claro' ? 'eager' : 'lazy'} />
 </a>

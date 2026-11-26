@@ -28,7 +28,7 @@ export function localBusinessSchema(opts: { cidade?: Cidade; bairro?: string; li
     name: site.name,
     url: cidade ? urlAbsoluta(cidadePath(cidade)) : `${site.url}/`,
     image: urlAbsoluta('/og.jpg'),
-    logo: urlAbsoluta('/favicon.svg'),
+    logo: urlAbsoluta('/logo.png'),
     description: site.description,
     openingHoursSpecification: horario,
   };

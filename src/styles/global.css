@@ -407,3 +407,16 @@ body:has(.nav-mobile[open]) .float-cta { display: none; }
 .service-card.has-photo .service-icon { margin-top: -26px; position: relative; box-shadow: 0 0 0 4px #fff; }
 .service-figure { margin: 0 0 24px; }
 .service-figure img { width: 100%; max-width: 400px; border-radius: var(--radius); }
+
+/* logo */
+.brand img { width: 132px; height: auto; }
+.brand-escuro { background: #fff; padding: 10px 14px; border-radius: 14px; }
+@media (max-width: 560px) { .brand-claro img { width: 108px; } }
+
+/* topo com foto real escurecida em verde */
+.hero-foto { isolation: isolate; }
+.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 30%; z-index: -2; }
+.hero-foto::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(100deg, rgba(5, 35, 26, .94) 0%, rgba(5, 35, 26, .86) 45%, rgba(10, 58, 38, .62) 100%);
+}
