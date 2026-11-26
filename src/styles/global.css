@@ -398,3 +398,12 @@ body:has(.nav-mobile[open]) .float-cta { display: none; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition: none !important; scroll-behavior: auto !important; }
 }
 :focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+
+/* fotos dos serviços */
+.service-card.has-photo { padding-top: 0; overflow: hidden; }
+.service-photo { display: block; margin: 0 -24px; aspect-ratio: 4 / 3; overflow: hidden; background: var(--bg-soft); }
+.service-photo img { width: 100%; height: 100%; object-fit: cover; }
+.service-photo-empty { display: grid; place-items: center; color: rgba(255, 198, 41, .7); background: radial-gradient(80% 90% at 50% 30%, var(--green-800), var(--green-950)); }
+.service-card.has-photo .service-icon { margin-top: -26px; position: relative; box-shadow: 0 0 0 4px #fff; }
+.service-figure { margin: 0 0 24px; }
+.service-figure img { width: 100%; max-width: 400px; border-radius: var(--radius); }

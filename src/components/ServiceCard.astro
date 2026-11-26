@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import type { Servico } from '../data/servicos';
+import { fotoDoServico } from '../data/fotos';
 
 interface Props {
   servico: Servico;
@@ -8,9 +10,19 @@ interface Props {
 }
 
 const { servico, href } = Astro.props;
+const foto = fotoDoServico(servico.slug);
 ---
 
-<a class="service-card" href={href}>
+<a class="service-card has-photo" href={href}>
+  {
+    foto ? (
+      <span class="service-photo">
+        <Image src={foto.src} alt={foto.alt} widths={[320, 400]} sizes="(max-width: 600px) 100vw, 300px" quality={70} />
+      </span>
+    ) : (
+      <span class="service-photo service-photo-empty"><Icon name={servico.icon} size={72} /></span>
+    )
+  }
   <span class="service-icon"><Icon name={servico.icon} size={28} /></span>
   <h3>{servico.nome}</h3>
   <p>{servico.resumo}</p>

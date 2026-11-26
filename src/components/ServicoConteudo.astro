@@ -1,6 +1,8 @@
 ---
 // Corpo da página de serviço, usado na versão geral e na versão de cada cidade.
+import { Image } from 'astro:assets';
 import CtaButtons from './CtaButtons.astro';
+import { fotoDoServico } from '../data/fotos';
 import type { Servico } from '../data/servicos';
 import { servicos, servicoPath } from '../data/servicos';
 import { cidades, cidadeDestino, cidadePath, servicoNaCidadePath, type Cidade } from '../data/cidades';
@@ -16,12 +18,14 @@ const local = cidade ? `${cidade.nome} - ${cidade.uf}` : undefined;
 const assunto = `preciso de ${servico.nome.toLowerCase()}`;
 const fraseCidade = cidade?.servicos?.[servico.slug];
 const bairros = cidade ? bairrosDaCidade(cidade.slug) : [];
+const foto = fotoDoServico(servico.slug);
 const outros = servicos.filter((s) => s.slug !== servico.slug);
 ---
 
 <section class="section">
   <div class="container content-grid">
     <div class="prose">
+      {foto && <figure class="service-figure"><Image src={foto.src} alt={foto.alt} widths={[320, 400]} sizes="(max-width: 600px) 100vw, 400px" quality={70} /></figure>}
       <h2>Entenda o problema</h2>
       {fraseCidade && <p>{fraseCidade}</p>}
       {servico.intro.map((p) => <p>{p}</p>)}
