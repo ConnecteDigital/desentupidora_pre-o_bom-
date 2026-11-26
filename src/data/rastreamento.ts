@@ -1,8 +1,7 @@
-// Tag do Google (Google Ads / GA4). Preencha quando a conta informar os valores.
-// Enquanto GOOGLE_TAG_ID estiver vazio, o componente GoogleTag não renderiza nada.
+// Tag do Google Ads. A mesma tag e os mesmos rótulos valem para o site inteiro,
+// em todas as cidades. Se GOOGLE_TAG_ID ficar vazio, o componente GoogleTag não renderiza nada.
 
-// Ex.: 'AW-123456789'
-export const GOOGLE_TAG_ID = '';
-// Rótulos das ações de conversão (a parte depois da barra em 'AW-123456789/AbCdEfGh')
-export const ROTULO_CONVERSAO_WHATSAPP = '';
-export const ROTULO_CONVERSAO_LIGACAO = '';
+export const GOOGLE_TAG_ID = 'AW-16593385591';
+// Rótulos das ações de conversão (a parte depois da barra)
+export const ROTULO_CONVERSAO_WHATSAPP = 'r0whCN6mlrcZEPfwq-g9';
+export const ROTULO_CONVERSAO_LIGACAO = 'BpQkCJjDlrcZEPfwq-g9';

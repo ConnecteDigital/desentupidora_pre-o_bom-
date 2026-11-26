@@ -1,43 +1,35 @@
 ---
-// Tag do Google com conversões de WhatsApp e ligação.
-// Sem GOOGLE_TAG_ID (src/data/rastreamento.ts) este componente não renderiza nada.
-// Todo link wa.me e todo link tel: dispara a conversão correspondente, com a cidade
-// da página (ou a do próprio link, via data-cidade) como parâmetro.
+// Tag do Google Ads, uma única vez por página, no <head> do layout base.
+// Carrega direto (sem adiar), para ler o gclid assim que a página abre.
+// A conversão dispara SOMENTE no clique em link de WhatsApp ou de telefone,
+// por um único ouvinte delegado no document. Nunca no carregamento da página.
 import { GOOGLE_TAG_ID, ROTULO_CONVERSAO_WHATSAPP, ROTULO_CONVERSAO_LIGACAO } from '../data/rastreamento';
 
-interface Props {
-  cidade?: string;
-}
-
-const { cidade = '' } = Astro.props;
-const config = {
-  id: GOOGLE_TAG_ID,
-  whatsapp: ROTULO_CONVERSAO_WHATSAPP,
-  ligacao: ROTULO_CONVERSAO_LIGACAO,
-  cidade,
-};
+const id = GOOGLE_TAG_ID;
+const whatsapp = `${GOOGLE_TAG_ID}/${ROTULO_CONVERSAO_WHATSAPP}`;
+const ligacao = `${GOOGLE_TAG_ID}/${ROTULO_CONVERSAO_LIGACAO}`;
 ---
 
 {
   GOOGLE_TAG_ID && (
     <>
-      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TAG_ID}`} />
-      <script is:inline define:vars={{ config }}>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${id}`} />
+      <script is:inline define:vars={{ id, whatsapp, ligacao }}>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
         gtag('js', new Date());
-        gtag('config', config.id);
+        gtag('config', id);
         document.addEventListener('click', function (e) {
-          var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+          var a = e.target.closest && e.target.closest('a[href]');
           if (!a) return;
           var href = a.getAttribute('href') || '';
-          var tipo = href.indexOf('tel:') === 0 ? 'ligacao' : href.indexOf('https://wa.me/') === 0 ? 'whatsapp' : '';
-          if (!tipo) return;
-          var cidade = a.getAttribute('data-cidade') || config.cidade || 'sem cidade';
-          gtag('event', 'clique_' + tipo, { cidade: cidade });
-          var rotulo = config[tipo];
-          if (rotulo) gtag('event', 'conversion', { send_to: config.id + '/' + rotulo, cidade: cidade });
-        });
+          var sendTo = null;
+          if (/wa\.me|api\.whatsapp\.com/i.test(href)) sendTo = whatsapp;
+          else if (/^tel:/i.test(href)) sendTo = ligacao;
+          if (!sendTo || typeof gtag !== 'function') return;
+          gtag('event', 'conversion', { send_to: sendTo });
+        }, true);
       </script>
     </>
   )
