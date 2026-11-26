@@ -464,3 +464,13 @@ body:has(.nav-mobile[open]) .float-cta { display: none; }
   .hero-center .hero-badges { display: none; }
 }
 @media (max-width: 360px) { .hero-price { font-size: .6rem; } }
+
+/* faixa amarela mais fina; no celular só "Chegamos em 20 minutos" e o telefone */
+.topbar-inner { padding: 4px 0; }
+@media (max-width: 700px) {
+  .topbar-24h { display: none; }
+  .topbar { font-size: .8rem; }
+  .topbar-inner { padding: 3px 0; }
+  .topbar-inner > span, .topbar-phone { font-size: .8rem; white-space: nowrap; }
+  .nav-mobile nav { top: 96px; }
+}

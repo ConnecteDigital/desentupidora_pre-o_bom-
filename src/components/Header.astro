@@ -22,7 +22,7 @@ const linkServicos = cidade ? `${cidadePath(cidade)}#servicos` : '/servicos/';
 <header class="site-header">
   <div class="topbar">
     <div class="container topbar-inner">
-      <span><span class="pulse" aria-hidden="true"></span> Atendimento 24 horas · {mensagens.chegada}</span>
+      <span><span class="pulse" aria-hidden="true"></span> <span class="topbar-24h">Atendimento 24 horas · </span>{mensagens.chegada}</span>
       {
         c ? (
           <a href={c.tel} class="topbar-phone" data-cidade={c.cidade}><Icon name="phone" size={16} /> {c.telefone}</a>
